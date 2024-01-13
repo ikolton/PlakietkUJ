@@ -8,6 +8,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.IO;
 
 namespace PlakietkUJ
 {
@@ -19,6 +22,14 @@ namespace PlakietkUJ
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void CreatePlateButton_Click(object sender, RoutedEventArgs e)
+        {
+            //PlateEditorWindow plateEditorWindow = new PlateEditorWindow();
+            //plateEditorWindow.Show();
+            PlateEditorWindow alternatePlateEditorWindow = new PlateEditorWindow();
+            alternatePlateEditorWindow.Show();
         }
     }
 }
