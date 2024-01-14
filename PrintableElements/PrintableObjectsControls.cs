@@ -3,6 +3,7 @@ using System.Collections;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows;
+using PlakietkUJ.HelperClass;
 
 namespace PlakietkUJ.PrintableElements
 {
@@ -157,6 +158,69 @@ namespace PlakietkUJ.PrintableElements
             parentPanel.Children.Add(colorPicker);
         }
 
-        
+        internal static UIElement AddBackgroundElementControlsToEditablePanel(BackgroundElement printableElement)
+        {
+            Expander expander = new Expander();
+            expander.Header = "Edytuj tło";
+
+            StackPanel stackPanel = new StackPanel();
+            stackPanel.Orientation = Orientation.Vertical;
+            expander.Content = stackPanel;
+
+            int dpi = PageDpiHelper.GetDpiForA4((int)Math.Min(printableElement.Width,printableElement.Height));
+
+            AddLabelAndTextBox(stackPanel, "DPI: ", dpi.ToString(), out TextBox dpiTextBox);
+            AddLabelAndColorPicker(stackPanel, "Kolor tła: ", printableElement.BackgroundColor.Color, out ColorPicker.StandardColorPicker backgroundColorPicker);
+            AddLabelAndCheckBox(stackPanel, "Pionowo: ", printableElement.IsVertical, out CheckBox isVerticalCheckBox);
+
+           AddConfirmBackGroundButton(stackPanel, printableElement,dpiTextBox, isVerticalCheckBox, backgroundColorPicker);
+
+            
+            return expander;
+        }
+
+        private static void AddConfirmBackGroundButton(StackPanel stackPanel, BackgroundElement printableElement, TextBox dpiTextBox, CheckBox isVerticalCheckBox, StandardColorPicker backgroundColorPicker)
+        {
+            Button confirmButton = new Button();
+            confirmButton.Content = "Zatwierdź";
+            confirmButton.Click += (sender, e) =>
+            {
+                printableElement.BackgroundColor = new SolidColorBrush(backgroundColorPicker.SelectedColor);
+                printableElement.IsVertical = (bool)isVerticalCheckBox.IsChecked;
+
+                int dpi = int.Parse(dpiTextBox.Text);
+                int shorterSidePixels = PageDpiHelper.GetShorterSideForA4(dpi);
+                int longerSidePixels = PageDpiHelper.GetLongerSide(shorterSidePixels);
+
+
+                if (printableElement.IsVertical)
+                {
+                    printableElement.Width = shorterSidePixels;
+                    printableElement.Height = longerSidePixels;
+                }
+                else
+                {
+                    printableElement.Width = longerSidePixels;
+                    printableElement.Height = shorterSidePixels;
+                }
+                
+
+                printableElement.OnPropertyChanged();
+            };
+
+            stackPanel.Children.Add(confirmButton);
+        }
+
+        private static void AddLabelAndCheckBox(StackPanel stackPanel, string labelText, bool isVertical, out CheckBox isVerticalCheckBox)
+        {
+            Label label = new Label();
+            label.Content = labelText;
+
+            isVerticalCheckBox = new CheckBox();
+            isVerticalCheckBox.IsChecked = isVertical;
+
+            stackPanel.Children.Add(label);
+            stackPanel.Children.Add(isVerticalCheckBox);
+        }
     }
 }

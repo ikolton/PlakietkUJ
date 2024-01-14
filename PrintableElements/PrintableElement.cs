@@ -19,7 +19,7 @@ namespace PlakietkUJ.PrintableElements
         public double Height { get; set; }
         public SolidColorBrush BackgroundColor { get; set; }
 
-        public PrintableElement(double posX, double posY, double width, double height, SolidColorBrush backgroundColor, string type)
+        public PrintableElement(double posX, double posY, double width, double height, SolidColorBrush backgroundColor, string type = "PrintableElement")
         {
             PosX = posX;
             PosY = posY;

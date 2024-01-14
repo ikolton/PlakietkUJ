@@ -5,14 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PlakietkUJ"
         mc:Ignorable="d"
-        Title="PlateEditorWindow" Height="450" Width="800">
-    <Grid>
+        Title="PlakietkUJ" Height="450" Width="800">
+    <Grid Background="LightGray">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-
-        <Canvas x:Name="BackgroundBox" Grid.Column="0"/>
+        <Viewbox Grid.Column="0">
+        <Canvas x:Name="BackgroundBox" Background="White"/>
+        </Viewbox>
+        
         <Grid Grid.Column="1" Background="LightGray">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />

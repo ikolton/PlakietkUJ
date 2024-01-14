@@ -17,12 +17,11 @@ using PlakietkUJ.PrintableElements;
 using ColorPicker;
 using Microsoft.Win32;
 using Newtonsoft.Json;
+using System.Printing;
+using PlakietkUJ.HelperClass;
 
 namespace PlakietkUJ
 {
-    /// <summary>
-    /// Logika interakcji dla klasy PlateEditorWindow.xaml
-    /// </summary>
     public partial class PlateEditorWindow : Window
     {
         List<PrintableElement> printableElements = new List<PrintableElement>();
@@ -31,8 +30,46 @@ namespace PlakietkUJ
         public PlateEditorWindow()
         {
             InitializeComponent();
-            
+            AddBackgroundElement(CreateBasicBackgroundPrintableElement(100));
         }
+
+        #region BackgroundElement
+
+
+        private BackgroundElement CreateBasicBackgroundPrintableElement(int dpi)
+        {
+            int shorter = PageDpiHelper.GetShorterSideForA4(100);
+            int longer = PageDpiHelper.GetLongerSide(shorter);
+            return new BackgroundElement(0, 0, longer, shorter, Brushes.White);
+        }
+
+        void AddBackgroundElement(BackgroundElement backgroundElement)
+        {
+                printableElements.Add(backgroundElement);
+                BackgroundBox.Width = backgroundElement.Width;
+                BackgroundBox.Height = backgroundElement.Height;
+                BackgroundBox.Background = backgroundElement.BackgroundColor;
+
+                UIElement controls = PrintableObjectsControls.AddBackgroundElementControlsToEditablePanel(backgroundElement);
+
+                EditableObjectsPanel.Children.Add(controls);
+
+                backgroundElement.PropertyChanged += () =>
+                {
+                    EditBackgroundElementUiElement(backgroundElement);
+                };
+
+
+        }
+
+        private void EditBackgroundElementUiElement(BackgroundElement backgroundElement)
+        {
+            BackgroundBox.Width = backgroundElement.Width;
+            BackgroundBox.Height = backgroundElement.Height;
+            BackgroundBox.Background = backgroundElement.BackgroundColor;
+        }
+
+        #endregion
 
 
         #region TextField
@@ -183,8 +220,10 @@ namespace PlakietkUJ
         {
             Image image = new Image
             {
-                Source = imageElement.ImageSource
-            };
+                Source = imageElement.ImageSource,
+                Height = imageElement.ImageSource.Height * imageElement.ImageScale,
+                Width = imageElement.ImageSource.Width * imageElement.ImageScale
+        };
 
 
             Canvas canvas = new Canvas
@@ -193,6 +232,9 @@ namespace PlakietkUJ
                 Height = imageElement.Height,
                 Background = imageElement.BackgroundColor
             };
+
+            Canvas.SetLeft(canvas, imageElement.PosX);
+            Canvas.SetTop(canvas, imageElement.PosY);
 
             canvas.Children.Add(image);
 
@@ -212,6 +254,7 @@ namespace PlakietkUJ
                 PrintDialog printDialog = new PrintDialog();
                 if (printDialog.ShowDialog() == true)
                 {
+
                     printDialog.PrintVisual(BackgroundBox, "Plakietka");
                 }
             }
@@ -277,10 +320,37 @@ namespace PlakietkUJ
                 }
             }
         }
+
+
+
+
+
+        #endregion
+
+        #region ControlBackground
+
+        void AddBackgroundControlsToEditablePanel()
+        {
+            Label label = new Label();
+            label.Content = "Tło";
+            label.HorizontalAlignment = HorizontalAlignment.Center;
+
+            Label dpiLabel = new Label();
+            dpiLabel.Content = "DPI";
+            TextBox dpi = new TextBox();
+            dpi.Text = "100";
+
+            Label OrientationLabel = new Label();
+            OrientationLabel.Content = "Orientacja pionowa";
+            CheckBox OrientationCheckBox = new CheckBox();
+            OrientationCheckBox.IsChecked = false;
+
+            Label ConfirmLabel = new Label();
+            ConfirmLabel.Content = "Szerokość";
+
+        }
+
         
-
-
-
 
         #endregion
 
