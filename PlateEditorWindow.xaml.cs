@@ -86,12 +86,13 @@ namespace PlakietkUJ
             printableElements.Add(textField);
             Canvas canvas = CreateAndAddTextFieldToPlate(textField);
 
-            UIElement controls = PrintableObjectsControls.AddTextFieldControlsToEditablePanel(canvas, textField);
+            Expander controls = PrintableObjectsControls.AddTextFieldControlsToEditablePanel(canvas, textField);
             EditableObjectsPanel.Children.Add(controls);
 
             textField.PropertyChanged += () =>
             {
                 EditTextFieldUiElement(canvas, textField);
+                controls.Header = "Edytuj tekst: " + textField.Text;
             };
 
             textField.Deleted += () =>
@@ -108,6 +109,8 @@ namespace PlakietkUJ
             textBlock.Foreground = textField.FontColor;
             textBlock.FontSize = textField.FontSize;
             textBlock.FontFamily = textField.Font;
+            textBlock.FontStyle = textField.FontStyle;
+            textBlock.FontWeight = textField.FontWeight;
 
             canvas.Width = textField.Width;
             canvas.Height = textField.Height;

@@ -12,11 +12,27 @@ namespace PlakietkUJ.PrintableElements
     public class PrintableObjectsControls
     {
         #region TextField
+
         
-        public static UIElement AddTextFieldControlsToEditablePanel(Canvas canvas, TextField textField)
+        private static readonly FontStyle[] FontStyle = new FontStyle[]
+        {
+            FontStyles.Normal,
+            FontStyles.Italic,
+            FontStyles.Oblique,
+        };
+
+        private static readonly FontWeight[] FontWeightValues = new FontWeight[]
+        {
+            FontWeights.Normal,
+            FontWeights.Bold,
+        };
+
+
+
+        public static Expander AddTextFieldControlsToEditablePanel(Canvas canvas, TextField textField)
         {
             Expander expander = new Expander();
-            expander.Header = "Edytuj tekst";
+            expander.Header = "Edytuj tekst: " + textField.Text;
 
             StackPanel stackPanel = new StackPanel();
             stackPanel.Orientation = Orientation.Vertical;
@@ -30,11 +46,13 @@ namespace PlakietkUJ.PrintableElements
             AddLabelAndIntegerUpDown(stackPanel, "Szerokość tła: ", (int)textField.Width, out IntegerUpDown widthUpDown);
             AddLabelAndIntegerUpDown(stackPanel, "Wysokość tła: ", (int)textField.Height, out IntegerUpDown heightUpDown);
             AddLabelAndComboBox(stackPanel, "Czcionka: ", Fonts.SystemFontFamilies, textField.Font, out ComboBox fontComboBox);
+            AddLabelAndComboBox(stackPanel, "Styl tekstu: ",FontStyle , textField.FontStyle, out ComboBox fontStyleComboBox);
+            AddLabelAndComboBox(stackPanel, "Grubość tekstu: ", FontWeightValues, textField.FontWeight, out ComboBox fontWeightComboBox);
             AddLabelAndIntegerUpDown(stackPanel, "Rozmiar: ", (int)textField.FontSize, out IntegerUpDown fontSizeUpDown);
             AddLabelAndColorPicker(stackPanel, "Kolor Napisu: ", textField.FontColor.Color, out ColorPicker.StandardColorPicker fontColorPicker);
             AddLabelAndColorPicker(stackPanel, "Kolor tła: ", textField.BackgroundColor.Color, out ColorPicker.StandardColorPicker backgroundColorPicker);
 
-            AddConfirmTextButton(stackPanel, canvas, textField, posXUpDown, posYUpDown, widthUpDown, heightUpDown, textTextBox, fontComboBox, fontSizeUpDown, fontColorPicker, backgroundColorPicker);
+            AddConfirmTextButton(stackPanel, canvas, textField, posXUpDown, posYUpDown, widthUpDown, heightUpDown, textTextBox, fontComboBox, fontSizeUpDown, fontColorPicker, backgroundColorPicker, fontStyleComboBox, fontWeightComboBox);
             AddDeleteButton(stackPanel, canvas, textField);
 
 
@@ -42,7 +60,9 @@ namespace PlakietkUJ.PrintableElements
             return expander;
         }
 
-        private static void AddConfirmTextButton(StackPanel stackPanel, Canvas canvas, TextField textField, IntegerUpDown posXUpDown, IntegerUpDown posYUpDown, IntegerUpDown widthUpDown, IntegerUpDown heightUpDown, TextBox textTextBox, ComboBox fontComboBox, IntegerUpDown fontSizeUpDown, StandardColorPicker fontColorPicker, StandardColorPicker backgroundColorPicker)
+        private static void AddConfirmTextButton(StackPanel stackPanel, Canvas canvas, TextField textField, IntegerUpDown posXUpDown,
+            IntegerUpDown posYUpDown, IntegerUpDown widthUpDown, IntegerUpDown heightUpDown, TextBox textTextBox, ComboBox fontComboBox,
+            IntegerUpDown fontSizeUpDown, StandardColorPicker fontColorPicker, StandardColorPicker backgroundColorPicker, ComboBox fontStyleComboBox, ComboBox fontWeightComboBox)
         {
             Button confirmButton = new Button();
             confirmButton.Content = "Zatwierdź";
@@ -54,6 +74,8 @@ namespace PlakietkUJ.PrintableElements
                 textField.Height = heightUpDown.Value.Value;
                 textField.Text = textTextBox.Text;
                 textField.Font = (FontFamily)fontComboBox.SelectedItem;
+                textField.FontWeight = (FontWeight)fontWeightComboBox.SelectedItem;
+                textField.FontStyle = (FontStyle)fontStyleComboBox.SelectedItem;
                 textField.FontSize = fontSizeUpDown.Value.Value;
                 textField.FontColor = new SolidColorBrush(fontColorPicker.SelectedColor);
                 textField.BackgroundColor = new SolidColorBrush(backgroundColorPicker.SelectedColor);
@@ -169,7 +191,7 @@ namespace PlakietkUJ.PrintableElements
 
             int dpi = PageDpiHelper.GetDpiForA4((int)Math.Min(printableElement.Width, printableElement.Height));
 
-            AddLabelAndIntegerUpDown(stackPanel, "DPI: ", dpi, out IntegerUpDown dpiUpDown);
+            AddLabelAndIntegerUpDown(stackPanel, "DPI dla kartki A4: ", dpi, out IntegerUpDown dpiUpDown);
             AddLabelAndColorPicker(stackPanel, "Kolor tła: ", printableElement.BackgroundColor.Color, out ColorPicker.StandardColorPicker backgroundColorPicker);
             AddLabelAndCheckBox(stackPanel, "Pionowo: ", printableElement.IsVertical, out CheckBox isVerticalCheckBox);
 

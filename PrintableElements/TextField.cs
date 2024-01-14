@@ -14,13 +14,19 @@ namespace PlakietkUJ.PrintableElements
 
         public FontFamily Font { get; set; }
 
-        public TextField(double posX, double posY, double width, double height, string text, SolidColorBrush fontColor, double fontSize, FontFamily font, SolidColorBrush backgroundColor, string type = "TextField")
+        public FontStyle FontStyle { get; set; }
+
+        public FontWeight FontWeight { get; set; }
+
+        public TextField(double posX, double posY, double width, double height, string text, SolidColorBrush fontColor, double fontSize, FontFamily font, SolidColorBrush backgroundColor, string type = "TextField", FontStyle fontStyle = default, FontWeight fontWeight = default)
             : base(posX, posY, width, height, backgroundColor, type)
         {
             Text = text;
             FontColor = fontColor;
             FontSize = fontSize;
             Font = font;
+            FontStyle = fontStyle;
+            FontWeight = fontWeight;
         }
     }
 }
