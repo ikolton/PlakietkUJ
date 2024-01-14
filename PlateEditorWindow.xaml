@@ -13,11 +13,24 @@
         </Grid.ColumnDefinitions>
 
         <Canvas x:Name="BackgroundBox" Grid.Column="0"/>
-        <ScrollViewer Width="200" Background="LightGray" Grid.Column="1">
-            <StackPanel x:Name="EditableObjectsPanel">
-                <Button Content="Dodaj TextField" Click="AddTextField_Click"/>
+        <Grid Grid.Column="1" Background="LightGray">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+                
+                <ScrollViewer Width="220">
+                    <StackPanel x:Name="EditableObjectsPanel">
+                        <Button Content="Dodaj PoleTextowe" Click="AddTextField_Click"/>
+                        <Button Content="Dodaj ObrazekObrazkowe" Click="AddImageElement_Click"/>
+                    </StackPanel>
+                </ScrollViewer>
 
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Zapisz" Click="SaveButton_Click" Background="WhiteSmoke" HorizontalAlignment="Left" Margin="5"/>
+                <Button Content="Drukuj" Click="PrintButton_Click" Background="WhiteSmoke" HorizontalAlignment="Right" Margin="5"/>
+                <Button Content="Wczytaj" Click="LoadButton_Click" Background="WhiteSmoke" Margin="5"></Button>
             </StackPanel>
-        </ScrollViewer>
+        </Grid>
     </Grid>
 </Window>

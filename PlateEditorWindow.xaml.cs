@@ -15,6 +15,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using PlakietkUJ.PrintableElements;
 using ColorPicker;
+using Microsoft.Win32;
+using Newtonsoft.Json;
 
 namespace PlakietkUJ
 {
@@ -32,19 +34,33 @@ namespace PlakietkUJ
             
         }
 
-        
+
+        #region TextField
 
         private void AddTextField_Click(object sender, RoutedEventArgs e)
         {
-            TextField textField = new TextField(0, 0, 10, 10, "Ustaw tekst", Brushes.Black, 14, new FontFamily("Arial"), Brushes.White);
+            TextField textField = new TextField(0, 0, 10, 10, "Ustaw tekst", Brushes.Black, 14, new FontFamily("Arial"), Brushes.Transparent);
+            AddTextField(textField);
+        }
+
+        private void AddTextField(TextField textField)
+        {
+
             printableElements.Add(textField);
             Canvas canvas = CreateAndAddTextFieldToPlate(textField);
 
-            PrintableObjectsControls.AddTextFieldControlsToEditablePanel(canvas, textField, EditableObjectsPanel);
-            
+            UIElement controls = PrintableObjectsControls.AddTextFieldControlsToEditablePanel(canvas, textField);
+            EditableObjectsPanel.Children.Add(controls);
+
             textField.PropertyChanged += () =>
             {
                 EditTextFieldUiElement(canvas, textField);
+            };
+
+            textField.Deleted += () =>
+            {
+                EditableObjectsPanel.Children.Remove(controls);
+                printableElements.Remove(textField);
             };
         }
 
@@ -102,7 +118,171 @@ namespace PlakietkUJ
             return canvas;
         }
 
+        #endregion
+
+
+        #region ImageElement
+
+        private void AddImageElement_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Image Files (*.png;*.jpeg;*.jpg;*.gif;*.bmp)|*.png;*.jpeg;*.jpg;*.gif;*.bmp|All Files (*.*)|*.*";
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                ImageElement imageElement = new ImageElement(0, 0, 200, 200,1, new BitmapImage(new Uri(openFileDialog.FileName)), Brushes.Transparent);
+                AddImageElement(imageElement);
+            }
+        }
+
+        private void AddImageElement(ImageElement imageElement)
+        {
+            printableElements.Add(imageElement);
+            Canvas canvas = CreateAndAddImageElementToPlate(imageElement);
+
+            UIElement controls = PrintableObjectsControls.AddImageElementControlsToEditablePanel(canvas, imageElement);
+            EditableObjectsPanel.Children.Add(controls);
+
+            imageElement.PropertyChanged += () =>
+            {
+                EditImageElementUiElement(canvas, imageElement);
+            };
+
+            imageElement.Deleted += () =>
+            {
+                EditableObjectsPanel.Children.Remove(controls);
+                printableElements.Remove(imageElement);
+            };
+        }
+
+        private void EditImageElementUiElement(Canvas canvas, ImageElement imageElement)
+        {
+            Image image = (Image)canvas.Children[0];
+            image.Source = imageElement.ImageSource;
+            image.Height = imageElement.ImageSource.Height * imageElement.ImageScale;
+            image.Width = imageElement.ImageSource.Width * imageElement.ImageScale;
+           
+
+            canvas.Width = imageElement.Width;
+            canvas.Height = imageElement.Height;
+            canvas.Background = imageElement.BackgroundColor;
+
+            Canvas.SetLeft(canvas, imageElement.PosX);
+            Canvas.SetTop(canvas, imageElement.PosY);
+        }
+
+        private Canvas CreateAndAddImageElementToPlate(ImageElement imageElement)
+        {
+            Canvas canvas = CreateImageElementUiElement(imageElement);
+
+            BackgroundBox.Children.Add(canvas);
+            return canvas;
+        }
+
+        private Canvas CreateImageElementUiElement(ImageElement imageElement)
+        {
+            Image image = new Image
+            {
+                Source = imageElement.ImageSource
+            };
+
+
+            Canvas canvas = new Canvas
+            {
+                Width = imageElement.Width,
+                Height = imageElement.Height,
+                Background = imageElement.BackgroundColor
+            };
+
+            canvas.Children.Add(image);
+
+            return canvas;
+        }
+
+        #endregion
+
+
+        #region Print
+
+        private void PrintButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                this.IsEnabled = false;
+                PrintDialog printDialog = new PrintDialog();
+                if (printDialog.ShowDialog() == true)
+                {
+                    printDialog.PrintVisual(BackgroundBox, "Plakietka");
+                }
+            }
+            finally
+            {
+                this.IsEnabled = true;
+            }
+        }
+
+        #endregion
+
+
+        #region Save
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            var settings = new JsonSerializerSettings();
+            settings.TypeNameHandling = TypeNameHandling.Objects;
+            
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
+            saveFileDialog.RestoreDirectory = true;
+            saveFileDialog.FileName = "Plakietka";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                string json = JsonConvert.SerializeObject(printableElements, Formatting.Indented, settings);
+
+                System.IO.File.WriteAllText(saveFileDialog.FileName, json);
+            }
+
+
+        }
+
+        #endregion
+
+        #region Load
         
+        private void LoadButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string json = System.IO.File.ReadAllText(openFileDialog.FileName);
+                List<PrintableElement> loadedPrintableElements = JsonConvert.DeserializeObject<List<PrintableElement>>(json);
+                
+                foreach (PrintableElement printableElement in loadedPrintableElements)
+                {
+
+                    
+
+                    
+                    if (printableElement.Type == "TextField")
+                    {
+                        TextField textField = (TextField)printableElement;
+                        AddTextField(textField);
+                    }
+                    else if (printableElement.Type == "ImageElement")
+                    {
+                        ImageElement imageElement = (ImageElement)printableElement;
+                        AddImageElement(imageElement);
+                    }
+                }
+            }
+        }
+        
+
+
+
+
+        #endregion
 
 
     }

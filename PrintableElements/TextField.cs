@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using System.ComponentModel;
+using Newtonsoft.Json;
+using JsonSubTypes;
 
 namespace PlakietkUJ.PrintableElements
 {
@@ -12,8 +14,8 @@ namespace PlakietkUJ.PrintableElements
 
         public FontFamily Font { get; set; }
 
-        public TextField(double posX, double posY, double width, double height, string text, SolidColorBrush fontColor, double fontSize, FontFamily font, SolidColorBrush backgroundColor)
-            : base(posX, posY, width, height, backgroundColor)
+        public TextField(double posX, double posY, double width, double height, string text, SolidColorBrush fontColor, double fontSize, FontFamily font, SolidColorBrush backgroundColor, string type = "TextField")
+            : base(posX, posY, width, height, backgroundColor, type)
         {
             Text = text;
             FontColor = fontColor;
