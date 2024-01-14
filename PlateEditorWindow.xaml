@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:PlakietkUJ"
         mc:Ignorable="d"
         Title="PlakietkUJ" Height="450" Width="800">
@@ -12,7 +13,8 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Viewbox Grid.Column="0">
-        <Canvas x:Name="BackgroundBox" Background="White"/>
+            <Canvas x:Name="BackgroundBox" Background="White">
+            </Canvas>
         </Viewbox>
         
         <Grid Grid.Column="1" Background="LightGray">
@@ -22,11 +24,16 @@
             </Grid.RowDefinitions>
                 
                 <ScrollViewer Width="220">
-                    <StackPanel x:Name="EditableObjectsPanel">
+                    <StackPanel>
+                    <StackPanel>
                         <Button Content="Dodaj PoleTextowe" Click="AddTextField_Click"/>
-                        <Button Content="Dodaj ObrazekObrazkowe" Click="AddImageElement_Click"/>
+                        <Button Content="Dodaj Obrazek" Click="AddImageElement_Click"/>
                     </StackPanel>
-                </ScrollViewer>
+                    <StackPanel x:Name="EditableObjectsPanel">
+                        
+                    </StackPanel>
+                    </StackPanel>
+            </ScrollViewer>
 
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="Zapisz" Click="SaveButton_Click" Background="WhiteSmoke" HorizontalAlignment="Left" Margin="5"/>

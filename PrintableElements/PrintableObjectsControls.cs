@@ -3,12 +3,16 @@ using System.Collections;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using PlakietkUJ.HelperClass;
-
+using Microsoft.Win32;
+using Xceed.Wpf.Toolkit; 
 namespace PlakietkUJ.PrintableElements
 {
     public class PrintableObjectsControls
     {
+        #region TextField
+        
         public static UIElement AddTextFieldControlsToEditablePanel(Canvas canvas, TextField textField)
         {
             Expander expander = new Expander();
@@ -21,22 +25,52 @@ namespace PlakietkUJ.PrintableElements
              
 
             AddLabelAndTextBox(stackPanel, "Tekst: ", textField.Text, out TextBox textTextBox);
-            AddLabelAndTextBox(stackPanel, "Pozycja Pozioma: ", textField.PosX.ToString(), out TextBox posXTextBox);
-            AddLabelAndTextBox(stackPanel, "Pozycja Pionowa: ", textField.PosY.ToString(), out TextBox posYTextBox);
-            AddLabelAndTextBox(stackPanel, "Szerokość tła: ", textField.Width.ToString(), out TextBox widthTextBox);
-            AddLabelAndTextBox(stackPanel, "Wysokość tła: ", textField.Height.ToString(), out TextBox heightTextBox);
+            AddLabelAndIntegerUpDown(stackPanel, "Pozycja Pozioma: ", (int)textField.PosX, out IntegerUpDown posXUpDown);
+            AddLabelAndIntegerUpDown(stackPanel, "Pozycja Pionowa: ", (int)textField.PosY, out IntegerUpDown posYUpDown);
+            AddLabelAndIntegerUpDown(stackPanel, "Szerokość tła: ", (int)textField.Width, out IntegerUpDown widthUpDown);
+            AddLabelAndIntegerUpDown(stackPanel, "Wysokość tła: ", (int)textField.Height, out IntegerUpDown heightUpDown);
             AddLabelAndComboBox(stackPanel, "Czcionka: ", Fonts.SystemFontFamilies, textField.Font, out ComboBox fontComboBox);
-            AddLabelAndTextBox(stackPanel, "Rozmiar: ", textField.FontSize.ToString(), out TextBox fontSizeTextBox);
+            AddLabelAndIntegerUpDown(stackPanel, "Rozmiar: ", (int)textField.FontSize, out IntegerUpDown fontSizeUpDown);
             AddLabelAndColorPicker(stackPanel, "Kolor Napisu: ", textField.FontColor.Color, out ColorPicker.StandardColorPicker fontColorPicker);
             AddLabelAndColorPicker(stackPanel, "Kolor tła: ", textField.BackgroundColor.Color, out ColorPicker.StandardColorPicker backgroundColorPicker);
 
-            AddConfirmTextButton(stackPanel, canvas, textField, posXTextBox, posYTextBox, widthTextBox, heightTextBox, textTextBox, fontComboBox, fontSizeTextBox, fontColorPicker, backgroundColorPicker);
+            AddConfirmTextButton(stackPanel, canvas, textField, posXUpDown, posYUpDown, widthUpDown, heightUpDown, textTextBox, fontComboBox, fontSizeUpDown, fontColorPicker, backgroundColorPicker);
             AddDeleteButton(stackPanel, canvas, textField);
 
 
             //return stackPanel;
             return expander;
         }
+
+        private static void AddConfirmTextButton(StackPanel stackPanel, Canvas canvas, TextField textField, IntegerUpDown posXUpDown, IntegerUpDown posYUpDown, IntegerUpDown widthUpDown, IntegerUpDown heightUpDown, TextBox textTextBox, ComboBox fontComboBox, IntegerUpDown fontSizeUpDown, StandardColorPicker fontColorPicker, StandardColorPicker backgroundColorPicker)
+        {
+            Button confirmButton = new Button();
+            confirmButton.Content = "Zatwierdź";
+            confirmButton.Click += (sender, e) =>
+            {
+                textField.PosX = posXUpDown.Value.Value;
+                textField.PosY = posYUpDown.Value.Value;
+                textField.Width = widthUpDown.Value.Value;
+                textField.Height = heightUpDown.Value.Value;
+                textField.Text = textTextBox.Text;
+                textField.Font = (FontFamily)fontComboBox.SelectedItem;
+                textField.FontSize = fontSizeUpDown.Value.Value;
+                textField.FontColor = new SolidColorBrush(fontColorPicker.SelectedColor);
+                textField.BackgroundColor = new SolidColorBrush(backgroundColorPicker.SelectedColor);
+
+                //run property changed event
+                textField.OnPropertyChanged();
+
+            };
+
+            stackPanel.Children.Add(confirmButton);
+        }
+
+
+
+        #endregion
+
+        #region ImageElement
 
         internal static UIElement AddImageElementControlsToEditablePanel(Canvas canvas, ImageElement imageElement)
         {
@@ -47,40 +81,144 @@ namespace PlakietkUJ.PrintableElements
             stackPanel.Orientation = Orientation.Vertical;
             expander.Content = stackPanel;
 
-            AddLabelAndTextBox(stackPanel, "Skala obrazu: ", imageElement.ImageScale.ToString(), out TextBox imageScaleTextBox);
-            AddLabelAndTextBox(stackPanel, "Pozycja Pozioma: ", imageElement.PosX.ToString(), out TextBox posXTextBox);
-            AddLabelAndTextBox(stackPanel, "Pozycja Pionowa: ", imageElement.PosY.ToString(), out TextBox posYTextBox);
-            AddLabelAndTextBox(stackPanel, "Szerokość tła: ", imageElement.Width.ToString(), out TextBox widthTextBox);
-            AddLabelAndTextBox(stackPanel, "Wysokość tła: ", imageElement.Height.ToString(), out TextBox heightTextBox);
-            AddLabelAndColorPicker(stackPanel, "Kolor tła: ", imageElement.BackgroundColor.Color, out ColorPicker.StandardColorPicker backgroundColorPicker);
+            
+            AddLabelAndSlider(stackPanel, "Skala obrazu: ",0.1, 2, imageElement.ImageScale, out Slider imageScaleSlider);
            
-            AddConfirmTextImageButton(stackPanel, canvas, imageElement, posXTextBox, posYTextBox, widthTextBox, heightTextBox, backgroundColorPicker, imageScaleTextBox);
+            AddLabelAndIntegerUpDown(stackPanel, "Pozycja Pozioma: ", (int)imageElement.PosX, out IntegerUpDown posXUpDown);
+            AddLabelAndIntegerUpDown(stackPanel, "Pozycja Pionowa: ", (int)imageElement.PosY, out IntegerUpDown posYUpDown);
+            AddLabelAndIntegerUpDown(stackPanel, "Szerokość tła: ", (int)imageElement.Width, out IntegerUpDown widthUpDown);
+            AddLabelAndIntegerUpDown(stackPanel, "Wysokość tła: ", (int)imageElement.Height, out IntegerUpDown heightUpDown);
+            AddLabelAndColorPicker(stackPanel, "Kolor tła: ", imageElement.BackgroundColor.Color, out ColorPicker.StandardColorPicker backgroundColorPicker);
+            AddChangeImageButton(stackPanel, imageElement);
+            
+            AddConfirmImageButton(stackPanel, canvas, imageElement, posXUpDown, posYUpDown, widthUpDown, heightUpDown, backgroundColorPicker, imageScaleSlider);
             AddDeleteButton(stackPanel, canvas, imageElement);
 
             //return stackPanel;
             return expander;
         }
 
-        private static void AddConfirmTextImageButton(StackPanel stackPanel, Canvas canvas, ImageElement imageElement, TextBox posXTextBox, TextBox posYTextBox, TextBox widthTextBox, TextBox heightTextBox, StandardColorPicker backgroundColorPicker, TextBox imageScaleTextBox)
+        private static void AddLabelAndSlider(StackPanel stackPanel, string labelText, double min, int max, double imageScale, out Slider scaleSlider)
+        {
+            Label label = new Label();
+            label.Content = labelText;
+
+            scaleSlider = new Slider();
+            scaleSlider.Minimum = min;
+            scaleSlider.Maximum = max;
+            scaleSlider.Value = imageScale;
+
+            stackPanel.Children.Add(label);
+            stackPanel.Children.Add(scaleSlider);
+        }
+
+        private static void AddChangeImageButton(StackPanel stackPanel, ImageElement imageElement)
+        {
+            //ChangeImageSource
+            Button changeImageButton = new Button();
+            changeImageButton.Content = "Zmień obraz";
+            changeImageButton.Margin = new Thickness(0, 0, 0, 10);
+
+            changeImageButton.Click += (sender, e) =>
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "Image Files (*.png;*.jpeg;*.jpg;*.gif;*.bmp)|*.png;*.jpeg;*.jpg;*.gif;*.bmp|All Files (*.*)|*.*";
+
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    imageElement.ImageSource = new BitmapImage(new System.Uri(openFileDialog.FileName));
+                }
+            };
+
+            stackPanel.Children.Add(changeImageButton);
+        }
+
+        private static void AddConfirmImageButton(StackPanel stackPanel, Canvas canvas, ImageElement imageElement, IntegerUpDown posXUpDown, IntegerUpDown posYUpDown, IntegerUpDown widthUpDown, IntegerUpDown heightUpDown, StandardColorPicker backgroundColorPicker, Slider imageScaleSlider)
         {
             Button confirmButton = new Button();
             confirmButton.Content = "Zatwierdź";
             confirmButton.Click += (sender, e) =>
             {
-                imageElement.PosX = double.Parse(posXTextBox.Text);
-                imageElement.PosY = double.Parse(posYTextBox.Text);
-                imageElement.Width = double.Parse(widthTextBox.Text);
-                imageElement.Height = double.Parse(heightTextBox.Text);
+                imageElement.PosX = double.Parse(posXUpDown.Text);
+                imageElement.PosY = double.Parse(posYUpDown.Text);
+                imageElement.Width = double.Parse(widthUpDown.Text);
+                imageElement.Height = double.Parse(heightUpDown.Text);
                 imageElement.BackgroundColor = new SolidColorBrush(backgroundColorPicker.SelectedColor);
-                imageElement.ImageScale = double.Parse(imageScaleTextBox.Text);
+                imageElement.ImageScale = imageScaleSlider.Value;
 
                 //run property changed event
                 imageElement.OnPropertyChanged();
-
             };
 
             stackPanel.Children.Add(confirmButton);
         }
+
+        #endregion
+
+
+        #region BackgroundElement
+
+        internal static UIElement AddBackgroundElementControlsToEditablePanel(BackgroundElement printableElement)
+        {
+            Expander expander = new Expander();
+            expander.Header = "Edytuj tło";
+
+            StackPanel stackPanel = new StackPanel();
+            stackPanel.Orientation = Orientation.Vertical;
+            expander.Content = stackPanel;
+
+            int dpi = PageDpiHelper.GetDpiForA4((int)Math.Min(printableElement.Width, printableElement.Height));
+
+            AddLabelAndIntegerUpDown(stackPanel, "DPI: ", dpi, out IntegerUpDown dpiUpDown);
+            AddLabelAndColorPicker(stackPanel, "Kolor tła: ", printableElement.BackgroundColor.Color, out ColorPicker.StandardColorPicker backgroundColorPicker);
+            AddLabelAndCheckBox(stackPanel, "Pionowo: ", printableElement.IsVertical, out CheckBox isVerticalCheckBox);
+
+            AddConfirmBackGroundButton(stackPanel, printableElement, dpiUpDown, isVerticalCheckBox, backgroundColorPicker);
+
+
+            return expander;
+        }
+
+        private static void AddConfirmBackGroundButton(StackPanel stackPanel, BackgroundElement printableElement, IntegerUpDown dpiUpDown, CheckBox isVerticalCheckBox, StandardColorPicker backgroundColorPicker)
+        {
+            Button confirmButton = new Button();
+            confirmButton.Content = "Zatwierdź";
+            confirmButton.Click += (sender, e) =>
+            {
+                printableElement.BackgroundColor = new SolidColorBrush(backgroundColorPicker.SelectedColor);
+                printableElement.IsVertical = (bool)isVerticalCheckBox.IsChecked;
+
+                int dpi = dpiUpDown.Value.Value;
+                int shorterSidePixels = PageDpiHelper.GetShorterSideForA4(dpi);
+                int longerSidePixels = PageDpiHelper.GetLongerSide(shorterSidePixels);
+
+
+                if (printableElement.IsVertical)
+                {
+                    printableElement.Width = shorterSidePixels;
+                    printableElement.Height = longerSidePixels;
+                }
+                else
+                {
+                    printableElement.Width = longerSidePixels;
+                    printableElement.Height = shorterSidePixels;
+                }
+
+
+                printableElement.OnPropertyChanged();
+            };
+
+            stackPanel.Children.Add(confirmButton);
+        }
+
+        #endregion
+
+
+        #region Controls for all elements
+
+        
+
+        
 
         private static void AddDeleteButton(StackPanel stackPanel, Canvas canvas, PrintableElement element)
         {
@@ -96,30 +234,7 @@ namespace PlakietkUJ.PrintableElements
 
             stackPanel.Children.Add(deleteButton);
         }
-
-        private static void AddConfirmTextButton(StackPanel stackPanel, Canvas canvas, TextField textField, TextBox posXTextBox, TextBox posYTextBox, TextBox widthTextBox, TextBox heightTextBox, TextBox textTextBox, ComboBox fontComboBox, TextBox fontSizeTextBox, StandardColorPicker fontColorPicker, StandardColorPicker backgroundColorPicker)
-        {
-            Button confirmButton = new Button();
-            confirmButton.Content = "Zatwierdź";
-            confirmButton.Click += (sender, e) =>
-            {
-                textField.PosX = double.Parse(posXTextBox.Text);
-                textField.PosY = double.Parse(posYTextBox.Text);
-                textField.Width = double.Parse(widthTextBox.Text);
-                textField.Height = double.Parse(heightTextBox.Text);
-                textField.Text = textTextBox.Text;
-                textField.Font = (FontFamily)fontComboBox.SelectedItem;
-                textField.FontSize = double.Parse(fontSizeTextBox.Text);
-                textField.FontColor = new SolidColorBrush(fontColorPicker.SelectedColor);
-                textField.BackgroundColor = new SolidColorBrush(backgroundColorPicker.SelectedColor);
-
-                //run property changed event
-                textField.OnPropertyChanged();
-
-            };
-
-            stackPanel.Children.Add(confirmButton);
-        }
+        
 
         private static void AddLabelAndTextBox(StackPanel parentPanel, string labelText, string textBoxText, out TextBox textBox)
         {
@@ -158,58 +273,6 @@ namespace PlakietkUJ.PrintableElements
             parentPanel.Children.Add(colorPicker);
         }
 
-        internal static UIElement AddBackgroundElementControlsToEditablePanel(BackgroundElement printableElement)
-        {
-            Expander expander = new Expander();
-            expander.Header = "Edytuj tło";
-
-            StackPanel stackPanel = new StackPanel();
-            stackPanel.Orientation = Orientation.Vertical;
-            expander.Content = stackPanel;
-
-            int dpi = PageDpiHelper.GetDpiForA4((int)Math.Min(printableElement.Width,printableElement.Height));
-
-            AddLabelAndTextBox(stackPanel, "DPI: ", dpi.ToString(), out TextBox dpiTextBox);
-            AddLabelAndColorPicker(stackPanel, "Kolor tła: ", printableElement.BackgroundColor.Color, out ColorPicker.StandardColorPicker backgroundColorPicker);
-            AddLabelAndCheckBox(stackPanel, "Pionowo: ", printableElement.IsVertical, out CheckBox isVerticalCheckBox);
-
-           AddConfirmBackGroundButton(stackPanel, printableElement,dpiTextBox, isVerticalCheckBox, backgroundColorPicker);
-
-            
-            return expander;
-        }
-
-        private static void AddConfirmBackGroundButton(StackPanel stackPanel, BackgroundElement printableElement, TextBox dpiTextBox, CheckBox isVerticalCheckBox, StandardColorPicker backgroundColorPicker)
-        {
-            Button confirmButton = new Button();
-            confirmButton.Content = "Zatwierdź";
-            confirmButton.Click += (sender, e) =>
-            {
-                printableElement.BackgroundColor = new SolidColorBrush(backgroundColorPicker.SelectedColor);
-                printableElement.IsVertical = (bool)isVerticalCheckBox.IsChecked;
-
-                int dpi = int.Parse(dpiTextBox.Text);
-                int shorterSidePixels = PageDpiHelper.GetShorterSideForA4(dpi);
-                int longerSidePixels = PageDpiHelper.GetLongerSide(shorterSidePixels);
-
-
-                if (printableElement.IsVertical)
-                {
-                    printableElement.Width = shorterSidePixels;
-                    printableElement.Height = longerSidePixels;
-                }
-                else
-                {
-                    printableElement.Width = longerSidePixels;
-                    printableElement.Height = shorterSidePixels;
-                }
-                
-
-                printableElement.OnPropertyChanged();
-            };
-
-            stackPanel.Children.Add(confirmButton);
-        }
 
         private static void AddLabelAndCheckBox(StackPanel stackPanel, string labelText, bool isVertical, out CheckBox isVerticalCheckBox)
         {
@@ -222,5 +285,19 @@ namespace PlakietkUJ.PrintableElements
             stackPanel.Children.Add(label);
             stackPanel.Children.Add(isVerticalCheckBox);
         }
+
+        private static void AddLabelAndIntegerUpDown(StackPanel parentPanel, string labelText, int initialValue, out IntegerUpDown integerUpDown)
+        {
+            Label label = new Label();
+            label.Content = labelText;
+
+            integerUpDown = new IntegerUpDown();
+            integerUpDown.Value = initialValue;
+
+            parentPanel.Children.Add(label);
+            parentPanel.Children.Add(integerUpDown);
+        }
+
+        #endregion
     }
 }

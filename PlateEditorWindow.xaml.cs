@@ -294,6 +294,12 @@ namespace PlakietkUJ
         
         private void LoadButton_Click(object sender, RoutedEventArgs e)
         {
+            BackgroundBox.Children.Clear();
+            EditableObjectsPanel.Children.Clear();
+            printableElements.Clear();
+
+            
+
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
@@ -303,10 +309,6 @@ namespace PlakietkUJ
                 
                 foreach (PrintableElement printableElement in loadedPrintableElements)
                 {
-
-                    
-
-                    
                     if (printableElement.Type == "TextField")
                     {
                         TextField textField = (TextField)printableElement;
@@ -317,7 +319,15 @@ namespace PlakietkUJ
                         ImageElement imageElement = (ImageElement)printableElement;
                         AddImageElement(imageElement);
                     }
+                    else if (printableElement.Type == "BackgroundElement")
+                    {
+                        BackgroundElement backgroundElement = (BackgroundElement)printableElement;
+                        AddBackgroundElement(backgroundElement);
+                    }
+                   
                 }
+
+                printableElements = loadedPrintableElements;
             }
         }
 
@@ -327,32 +337,6 @@ namespace PlakietkUJ
 
         #endregion
 
-        #region ControlBackground
-
-        void AddBackgroundControlsToEditablePanel()
-        {
-            Label label = new Label();
-            label.Content = "Tło";
-            label.HorizontalAlignment = HorizontalAlignment.Center;
-
-            Label dpiLabel = new Label();
-            dpiLabel.Content = "DPI";
-            TextBox dpi = new TextBox();
-            dpi.Text = "100";
-
-            Label OrientationLabel = new Label();
-            OrientationLabel.Content = "Orientacja pionowa";
-            CheckBox OrientationCheckBox = new CheckBox();
-            OrientationCheckBox.IsChecked = false;
-
-            Label ConfirmLabel = new Label();
-            ConfirmLabel.Content = "Szerokość";
-
-        }
-
-        
-
-        #endregion
 
 
     }
