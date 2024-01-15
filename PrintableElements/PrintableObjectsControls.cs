@@ -31,34 +31,56 @@ namespace PlakietkUJ.PrintableElements
 
         public static Expander AddTextFieldControlsToEditablePanel(Canvas canvas, TextField textField)
         {
-            Expander expander = new Expander();
-            expander.Header = "Edytuj tekst: " + textField.Text;
+            Expander mainExpander = new Expander();
+            mainExpander.Margin = new Thickness(0, 10, 0, 0);
+            mainExpander.Header = "Edytuj tekst: " + textField.Text;
 
-            StackPanel stackPanel = new StackPanel();
-            stackPanel.Orientation = Orientation.Vertical;
+            StackPanel mainStackPanel = new StackPanel();
+            mainStackPanel.Orientation = Orientation.Vertical;
 
-            expander.Content = stackPanel;
+            mainExpander.Content = mainStackPanel;
              
+            //Font controls
+            AddLabelAndTextBox(mainStackPanel, "Tekst: ", textField.Text, out TextBox textTextBox);
+            AddLabelAndComboBox(mainStackPanel, "Czcionka: ", Fonts.SystemFontFamilies, textField.Font, out ComboBox fontComboBox);
+            AddLabelAndComboBox(mainStackPanel, "Styl tekstu: ", FontStyle, textField.FontStyle, out ComboBox fontStyleComboBox);
+            AddLabelAndComboBox(mainStackPanel, "Grubość tekstu: ", FontWeightValues, textField.FontWeight, out ComboBox fontWeightComboBox);
+            AddLabelAndIntegerUpDown(mainStackPanel, "Rozmiar czcionki: ", (int)textField.FontSize, out IntegerUpDown fontSizeUpDown);
 
-            AddLabelAndTextBox(stackPanel, "Tekst: ", textField.Text, out TextBox textTextBox);
-            AddLabelAndIntegerUpDown(stackPanel, "Pozycja Pozioma: ", (int)textField.PosX, out IntegerUpDown posXUpDown);
-            AddLabelAndIntegerUpDown(stackPanel, "Pozycja Pionowa: ", (int)textField.PosY, out IntegerUpDown posYUpDown);
-            AddLabelAndIntegerUpDown(stackPanel, "Szerokość tła: ", (int)textField.Width, out IntegerUpDown widthUpDown);
-            AddLabelAndIntegerUpDown(stackPanel, "Wysokość tła: ", (int)textField.Height, out IntegerUpDown heightUpDown);
-            AddLabelAndComboBox(stackPanel, "Czcionka: ", Fonts.SystemFontFamilies, textField.Font, out ComboBox fontComboBox);
-            AddLabelAndComboBox(stackPanel, "Styl tekstu: ",FontStyle , textField.FontStyle, out ComboBox fontStyleComboBox);
-            AddLabelAndComboBox(stackPanel, "Grubość tekstu: ", FontWeightValues, textField.FontWeight, out ComboBox fontWeightComboBox);
-            AddLabelAndIntegerUpDown(stackPanel, "Rozmiar: ", (int)textField.FontSize, out IntegerUpDown fontSizeUpDown);
-            AddLabelAndColorPicker(stackPanel, "Kolor Napisu: ", textField.FontColor.Color, out ColorPicker.StandardColorPicker fontColorPicker);
-            AddLabelAndColorPicker(stackPanel, "Kolor tła: ", textField.BackgroundColor.Color, out ColorPicker.StandardColorPicker backgroundColorPicker);
+            //Position and size controls
+            AddExpanderWithStackPanel(mainStackPanel, "Pozycja i kolor tekstu", out Expander positionAndSizeExpander, out StackPanel positionAndSizeStackPanel);
 
-            AddConfirmTextButton(stackPanel, canvas, textField, posXUpDown, posYUpDown, widthUpDown, heightUpDown, textTextBox, fontComboBox, fontSizeUpDown, fontColorPicker, backgroundColorPicker, fontStyleComboBox, fontWeightComboBox);
-            AddDeleteButton(stackPanel, canvas, textField);
+            AddLabelAndIntegerUpDown(positionAndSizeStackPanel, "Pozycja Pozioma: ", (int)textField.PosX, out IntegerUpDown posXUpDown);
+            AddLabelAndIntegerUpDown(positionAndSizeStackPanel, "Pozycja Pionowa: ", (int)textField.PosY, out IntegerUpDown posYUpDown);
+            AddLabelAndIntegerUpDown(positionAndSizeStackPanel, "Szerokość tła: ", (int)textField.Width, out IntegerUpDown widthUpDown);
+            AddLabelAndIntegerUpDown(positionAndSizeStackPanel, "Wysokość tła: ", (int)textField.Height, out IntegerUpDown heightUpDown);
+            AddLabelAndColorPicker(positionAndSizeStackPanel, "Kolor Napisu: ", textField.FontColor.Color, out ColorPicker.StandardColorPicker fontColorPicker);
+            AddLabelAndColorPicker(positionAndSizeStackPanel, "Kolor tła: ", textField.BackgroundColor.Color, out ColorPicker.StandardColorPicker backgroundColorPicker);
+            AddBringToFrontButton(positionAndSizeStackPanel, textField);
+
+            AddConfirmTextButton(mainStackPanel, canvas, textField, posXUpDown, posYUpDown, widthUpDown, heightUpDown, textTextBox, fontComboBox, fontSizeUpDown, fontColorPicker, backgroundColorPicker, fontStyleComboBox, fontWeightComboBox);
+            AddCopyButton(mainStackPanel, canvas, textField);
+
+            AddDeleteButton(mainStackPanel, canvas, textField);
 
 
             //return stackPanel;
-            return expander;
+            return mainExpander;
         }
+
+        private static void AddBringToFrontButton(StackPanel positionAndSizeStackPanel, PrintableElement printableElement)
+        {
+            Button bringToFrontButton = new Button();
+            bringToFrontButton.Content = "Przenieś na wierzch";
+            bringToFrontButton.Click += (sender, e) =>
+            {
+                printableElement.OnBringToFront();
+            };
+
+            positionAndSizeStackPanel.Children.Add(bringToFrontButton);
+        }
+
+        
 
         private static void AddConfirmTextButton(StackPanel stackPanel, Canvas canvas, TextField textField, IntegerUpDown posXUpDown,
             IntegerUpDown posYUpDown, IntegerUpDown widthUpDown, IntegerUpDown heightUpDown, TextBox textTextBox, ComboBox fontComboBox,
@@ -97,6 +119,7 @@ namespace PlakietkUJ.PrintableElements
         internal static UIElement AddImageElementControlsToEditablePanel(Canvas canvas, ImageElement imageElement)
         {
             Expander expander = new Expander();
+            expander.Margin = new Thickness(0, 10, 0, 0);
             expander.Header = "Edytuj obraz";
 
             StackPanel stackPanel = new StackPanel();
@@ -111,9 +134,13 @@ namespace PlakietkUJ.PrintableElements
             AddLabelAndIntegerUpDown(stackPanel, "Szerokość tła: ", (int)imageElement.Width, out IntegerUpDown widthUpDown);
             AddLabelAndIntegerUpDown(stackPanel, "Wysokość tła: ", (int)imageElement.Height, out IntegerUpDown heightUpDown);
             AddLabelAndColorPicker(stackPanel, "Kolor tła: ", imageElement.BackgroundColor.Color, out ColorPicker.StandardColorPicker backgroundColorPicker);
+            AddBringToFrontButton(stackPanel, imageElement);
+           
+            
             AddChangeImageButton(stackPanel, imageElement);
             
             AddConfirmImageButton(stackPanel, canvas, imageElement, posXUpDown, posYUpDown, widthUpDown, heightUpDown, backgroundColorPicker, imageScaleSlider);
+            AddCopyButton(stackPanel, canvas, imageElement);
             AddDeleteButton(stackPanel, canvas, imageElement);
 
             //return stackPanel;
@@ -237,9 +264,6 @@ namespace PlakietkUJ.PrintableElements
 
 
         #region Controls for all elements
-
-        
-
         
 
         private static void AddDeleteButton(StackPanel stackPanel, Canvas canvas, PrintableElement element)
@@ -290,6 +314,7 @@ namespace PlakietkUJ.PrintableElements
 
             colorPicker = new ColorPicker.StandardColorPicker();
             colorPicker.SelectedColor = selectedColor;
+            colorPicker.FontSize = 10;
 
             parentPanel.Children.Add(label);
             parentPanel.Children.Add(colorPicker);
@@ -318,6 +343,30 @@ namespace PlakietkUJ.PrintableElements
 
             parentPanel.Children.Add(label);
             parentPanel.Children.Add(integerUpDown);
+        }
+
+        private static void AddCopyButton(StackPanel stackPanel, Canvas canvas, PrintableElement element)
+        {
+            Button copyButton = new Button();
+            copyButton.Margin = new Thickness(0, 10, 0, 0);
+            copyButton.Content = "Kopiuj";
+            copyButton.Click += (sender, e) =>
+            {
+                element.OnCopy();
+            };
+
+            stackPanel.Children.Add(copyButton);
+        }
+
+        private static void AddExpanderWithStackPanel(StackPanel mainStackPanel, string headerText, out Expander positionAndSizeExpander, out StackPanel positionAndSizeStackPanel)
+        {
+            positionAndSizeExpander = new Expander();
+            positionAndSizeExpander.Margin = new Thickness(0, 10, 0, 20);
+            positionAndSizeExpander.Header = new TextBlock() { Text = headerText, FontSize = 15, FontWeight = FontWeights.Bold, TextAlignment = TextAlignment.Center };
+            positionAndSizeStackPanel = new StackPanel();
+            positionAndSizeStackPanel.Orientation = Orientation.Vertical;
+            positionAndSizeExpander.Content = positionAndSizeStackPanel;
+            mainStackPanel.Children.Add(positionAndSizeExpander);
         }
 
         #endregion

@@ -5,9 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:PlakietkUJ"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="{materialDesign:MaterialDesignFont}"
         mc:Ignorable="d"
-        Title="PlakietkUJ" Height="450" Width="800">
-    <Grid Background="LightGray">
+        Title="PlakietkUJ" Height="500" Width="800" WindowState="Maximized">
+    <Window.Resources>
+        <ResourceDictionary>
+            <!-- Material Design Theme -->
+            <ResourceDictionary.MergedDictionaries>
+                <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="DeepPurple" SecondaryColor="Lime" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Background="{DynamicResource MaterialDesignDarkBackground}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
@@ -16,18 +32,18 @@
             <Canvas x:Name="BackgroundBox" Background="White">
             </Canvas>
         </Viewbox>
-        
-        <Grid Grid.Column="1" Background="LightGray">
+
+        <Grid Grid.Column="1" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
                 
-                <ScrollViewer Width="220">
+                <ScrollViewer Width="300" >
+                <StackPanel Background="{DynamicResource MaterialDesignLightSeparatorBackground}">
                     <StackPanel>
-                    <StackPanel>
-                        <Button Content="Dodaj PoleTextowe" Click="AddTextField_Click"/>
-                        <Button Content="Dodaj Obrazek" Click="AddImageElement_Click"/>
+                        <Button Content="Dodaj Pole Tekstowe" Click="AddTextField_Click" Margin="10"/>
+                        <Button Content="Dodaj Obrazek" Click="AddImageElement_Click" Margin="10"/>
                     </StackPanel>
                     <StackPanel x:Name="EditableObjectsPanel">
                         
@@ -35,10 +51,10 @@
                     </StackPanel>
             </ScrollViewer>
 
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="Zapisz" Click="SaveButton_Click" Background="WhiteSmoke" HorizontalAlignment="Left" Margin="5"/>
-                <Button Content="Drukuj" Click="PrintButton_Click" Background="WhiteSmoke" HorizontalAlignment="Right" Margin="5"/>
-                <Button Content="Wczytaj" Click="LoadButton_Click" Background="WhiteSmoke" Margin="5"></Button>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" >
+                <Button Content="Zapisz" Click="SaveButton_Click"  HorizontalAlignment="Center" Margin="5"/>
+                <Button Content="Drukuj" Click="PrintButton_Click"  HorizontalAlignment="Center" Margin="5"/>
+                <Button Content="Wczytaj" Click="LoadButton_Click"  Margin="5"></Button>
             </StackPanel>
         </Grid>
     </Grid>

@@ -100,6 +100,18 @@ namespace PlakietkUJ
                 EditableObjectsPanel.Children.Remove(controls);
                 printableElements.Remove(textField);
             };
+
+            textField.Copy += () =>
+            {
+                TextField newTextField = new TextField(textField.PosX, textField.PosY + 50, textField.Width, textField.Height, textField.Text, textField.FontColor, textField.FontSize, textField.Font, textField.BackgroundColor);
+                AddTextField(newTextField);
+            };
+
+            textField.BringToFront += () =>
+            {
+                BackgroundBox.Children.Remove(canvas);
+                BackgroundBox.Children.Add(canvas);
+            };
         }
 
         private void EditTextFieldUiElement(Canvas canvas, TextField textField)
@@ -127,7 +139,9 @@ namespace PlakietkUJ
                 Text = textField.Text,
                 Foreground = textField.FontColor,
                 FontSize = textField.FontSize,
-                FontFamily = textField.Font
+                FontFamily = textField.Font,
+                FontStyle = textField.FontStyle,
+                FontWeight = textField.FontWeight
             };
 
             Canvas canvas = new Canvas
@@ -192,6 +206,18 @@ namespace PlakietkUJ
             {
                 EditableObjectsPanel.Children.Remove(controls);
                 printableElements.Remove(imageElement);
+            };
+
+            imageElement.Copy += () =>
+            {
+                ImageElement newImageElement = new ImageElement(imageElement.PosX, imageElement.PosY + 50, imageElement.Width, imageElement.Height, imageElement.ImageScale, imageElement.ImageSource, imageElement.BackgroundColor);
+                AddImageElement(newImageElement);
+            };
+
+            imageElement.BringToFront += () =>
+            {
+                BackgroundBox.Children.Remove(canvas);
+                BackgroundBox.Children.Add(canvas);
             };
         }
 

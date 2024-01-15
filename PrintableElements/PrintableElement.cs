@@ -11,6 +11,8 @@ namespace PlakietkUJ.PrintableElements
     {
         public event Action? PropertyChanged;
         public event Action? Deleted;
+        public event Action? Copy;
+        public event Action? BringToFront;
 
         public string Type { get;}
         public double PosX { get; set; }
@@ -39,7 +41,15 @@ namespace PlakietkUJ.PrintableElements
             Deleted?.Invoke();
         }
 
-        
+        public void OnCopy()
+        {
+            Copy?.Invoke();
+        }
+
+        public void OnBringToFront()
+        {
+            BringToFront?.Invoke();
+        }
 
     }
 }
