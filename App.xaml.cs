@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using System.Data;
+using System.Globalization;
 using System.Windows;
 
 namespace PlakietkUJ
@@ -9,6 +10,16 @@ namespace PlakietkUJ
     /// </summary>
     public partial class App : Application
     {
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            var langCode = PlakietkUJ.Properties.Settings.Default.LanguageCode;
+            Thread.CurrentThread.CurrentCulture = new CultureInfo(langCode);
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo(langCode);
+        }
+
     }
 
 }

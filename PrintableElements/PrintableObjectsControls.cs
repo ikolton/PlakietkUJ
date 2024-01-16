@@ -33,7 +33,7 @@ namespace PlakietkUJ.PrintableElements
         {
             Expander mainExpander = new Expander();
             mainExpander.Margin = new Thickness(0, 10, 0, 0);
-            mainExpander.Header = "Edytuj tekst: " + textField.Text;
+            mainExpander.Header = LocalizationHelper.GetLocalizedString("EditText") + textField.Text;
 
             StackPanel mainStackPanel = new StackPanel();
             mainStackPanel.Orientation = Orientation.Vertical;
@@ -41,24 +41,24 @@ namespace PlakietkUJ.PrintableElements
             mainExpander.Content = mainStackPanel;
              
             //Font controls
-            AddLabelAndTextBox(mainStackPanel, "Tekst: ", textField.Text, out TextBox textTextBox);
-            AddLabelAndComboBox(mainStackPanel, "Czcionka: ", Fonts.SystemFontFamilies, textField.Font, out ComboBox fontComboBox);
-            AddLabelAndComboBox(mainStackPanel, "Styl tekstu: ", FontStyle, textField.FontStyle, out ComboBox fontStyleComboBox);
-            AddLabelAndComboBox(mainStackPanel, "Grubość tekstu: ", FontWeightValues, textField.FontWeight, out ComboBox fontWeightComboBox);
-            AddLabelAndIntegerUpDown(mainStackPanel, "Rozmiar czcionki: ", (int)textField.FontSize, out IntegerUpDown fontSizeUpDown);
+            AddLabelAndTextBox(mainStackPanel, LocalizationHelper.GetLocalizedString("TextLabel"), textField.Text, out TextBox textTextBox);
+            AddLabelAndComboBox(mainStackPanel, LocalizationHelper.GetLocalizedString("FontLabel"), Fonts.SystemFontFamilies, textField.Font, out ComboBox fontComboBox);
+            AddLabelAndComboBox(mainStackPanel, LocalizationHelper.GetLocalizedString("FontStyleLabel"), FontStyle, textField.FontStyle, out ComboBox fontStyleComboBox);
+            AddLabelAndComboBox(mainStackPanel, LocalizationHelper.GetLocalizedString("FontWeightLabel"), FontWeightValues, textField.FontWeight, out ComboBox fontWeightComboBox);
+            AddLabelAndIntegerUpDown(mainStackPanel, LocalizationHelper.GetLocalizedString("FontSizeLabel"), (int)textField.FontSize, out IntegerUpDown fontSizeUpDown);
 
             //Position and size controls
-            AddExpanderWithStackPanel(mainStackPanel, "Pozycja i kolor tekstu", out Expander positionAndSizeExpander, out StackPanel positionAndSizeStackPanel);
+            AddExpanderWithStackPanel(mainStackPanel, LocalizationHelper.GetLocalizedString("TextPosAndColorLabel"), out Expander positionAndSizeExpander, out StackPanel positionAndSizeStackPanel);
 
-            AddLabelAndIntegerUpDown(positionAndSizeStackPanel, "Pozycja Pozioma: ", (int)textField.PosX, out IntegerUpDown posXUpDown);
-            AddLabelAndIntegerUpDown(positionAndSizeStackPanel, "Pozycja Pionowa: ", (int)textField.PosY, out IntegerUpDown posYUpDown);
-            AddLabelAndIntegerUpDown(positionAndSizeStackPanel, "Szerokość tła: ", (int)textField.Width, out IntegerUpDown widthUpDown);
-            AddLabelAndIntegerUpDown(positionAndSizeStackPanel, "Wysokość tła: ", (int)textField.Height, out IntegerUpDown heightUpDown);
-            AddLabelAndColorPicker(positionAndSizeStackPanel, "Kolor Napisu: ", textField.FontColor.Color, out ColorPicker.StandardColorPicker fontColorPicker);
-            AddLabelAndColorPicker(positionAndSizeStackPanel, "Kolor tła: ", textField.BackgroundColor.Color, out ColorPicker.StandardColorPicker backgroundColorPicker);
+            AddLabelAndIntegerUpDown(positionAndSizeStackPanel, LocalizationHelper.GetLocalizedString("HorizontalPosLabel"), (int)textField.PosX, out IntegerUpDown posXUpDown);
+            AddLabelAndIntegerUpDown(positionAndSizeStackPanel, LocalizationHelper.GetLocalizedString("VerticalPosLabel"), (int)textField.PosY, out IntegerUpDown posYUpDown);
+            //AddLabelAndIntegerUpDown(positionAndSizeStackPanel, "Szerokość tła: ", (int)textField.Width, out IntegerUpDown widthUpDown);
+           // AddLabelAndIntegerUpDown(positionAndSizeStackPanel, "Wysokość tła: ", (int)textField.Height, out IntegerUpDown heightUpDown);
+            AddLabelAndColorPicker(positionAndSizeStackPanel, LocalizationHelper.GetLocalizedString("TextColorLabel"), textField.FontColor.Color, out ColorPicker.StandardColorPicker fontColorPicker);
+            AddLabelAndColorPicker(positionAndSizeStackPanel, LocalizationHelper.GetLocalizedString("BackgroundColorLabel"), textField.BackgroundColor.Color, out ColorPicker.StandardColorPicker backgroundColorPicker);
             AddBringToFrontButton(positionAndSizeStackPanel, textField);
 
-            AddConfirmTextButton(mainStackPanel, canvas, textField, posXUpDown, posYUpDown, widthUpDown, heightUpDown, textTextBox, fontComboBox, fontSizeUpDown, fontColorPicker, backgroundColorPicker, fontStyleComboBox, fontWeightComboBox);
+            AddConfirmTextButton(mainStackPanel, canvas, textField, posXUpDown, posYUpDown,/* widthUpDown, heightUpDown,*/ textTextBox, fontComboBox, fontSizeUpDown, fontColorPicker, backgroundColorPicker, fontStyleComboBox, fontWeightComboBox);
             AddCopyButton(mainStackPanel, canvas, textField);
 
             AddDeleteButton(mainStackPanel, canvas, textField);
@@ -68,32 +68,22 @@ namespace PlakietkUJ.PrintableElements
             return mainExpander;
         }
 
-        private static void AddBringToFrontButton(StackPanel positionAndSizeStackPanel, PrintableElement printableElement)
-        {
-            Button bringToFrontButton = new Button();
-            bringToFrontButton.Content = "Przenieś na wierzch";
-            bringToFrontButton.Click += (sender, e) =>
-            {
-                printableElement.OnBringToFront();
-            };
-
-            positionAndSizeStackPanel.Children.Add(bringToFrontButton);
-        }
+       
 
         
 
         private static void AddConfirmTextButton(StackPanel stackPanel, Canvas canvas, TextField textField, IntegerUpDown posXUpDown,
-            IntegerUpDown posYUpDown, IntegerUpDown widthUpDown, IntegerUpDown heightUpDown, TextBox textTextBox, ComboBox fontComboBox,
+            IntegerUpDown posYUpDown, /*IntegerUpDown widthUpDown, IntegerUpDown heightUpDown,*/ TextBox textTextBox, ComboBox fontComboBox,
             IntegerUpDown fontSizeUpDown, StandardColorPicker fontColorPicker, StandardColorPicker backgroundColorPicker, ComboBox fontStyleComboBox, ComboBox fontWeightComboBox)
         {
             Button confirmButton = new Button();
-            confirmButton.Content = "Zatwierdź";
+            confirmButton.Content = LocalizationHelper.GetLocalizedString("ConfirmButton");
             confirmButton.Click += (sender, e) =>
             {
                 textField.PosX = posXUpDown.Value.Value;
                 textField.PosY = posYUpDown.Value.Value;
-                textField.Width = widthUpDown.Value.Value;
-                textField.Height = heightUpDown.Value.Value;
+                //textField.Width = widthUpDown.Value.Value;
+                //textField.Height = heightUpDown.Value.Value;
                 textField.Text = textTextBox.Text;
                 textField.Font = (FontFamily)fontComboBox.SelectedItem;
                 textField.FontWeight = (FontWeight)fontWeightComboBox.SelectedItem;
@@ -120,26 +110,26 @@ namespace PlakietkUJ.PrintableElements
         {
             Expander expander = new Expander();
             expander.Margin = new Thickness(0, 10, 0, 0);
-            expander.Header = "Edytuj obraz";
+            expander.Header = LocalizationHelper.GetLocalizedString("EditImage");
 
             StackPanel stackPanel = new StackPanel();
             stackPanel.Orientation = Orientation.Vertical;
             expander.Content = stackPanel;
 
             
-            AddLabelAndSlider(stackPanel, "Skala obrazu: ",0.1, 2, imageElement.ImageScale, out Slider imageScaleSlider);
+            AddLabelAndSlider(stackPanel, LocalizationHelper.GetLocalizedString("ImageScaleLabel"), 0.1, 2, imageElement.ImageScale, out Slider imageScaleSlider);
            
-            AddLabelAndIntegerUpDown(stackPanel, "Pozycja Pozioma: ", (int)imageElement.PosX, out IntegerUpDown posXUpDown);
-            AddLabelAndIntegerUpDown(stackPanel, "Pozycja Pionowa: ", (int)imageElement.PosY, out IntegerUpDown posYUpDown);
-            AddLabelAndIntegerUpDown(stackPanel, "Szerokość tła: ", (int)imageElement.Width, out IntegerUpDown widthUpDown);
-            AddLabelAndIntegerUpDown(stackPanel, "Wysokość tła: ", (int)imageElement.Height, out IntegerUpDown heightUpDown);
-            AddLabelAndColorPicker(stackPanel, "Kolor tła: ", imageElement.BackgroundColor.Color, out ColorPicker.StandardColorPicker backgroundColorPicker);
+            AddLabelAndIntegerUpDown(stackPanel, LocalizationHelper.GetLocalizedString("HorizontalPosLabel"), (int)imageElement.PosX, out IntegerUpDown posXUpDown);
+            AddLabelAndIntegerUpDown(stackPanel, LocalizationHelper.GetLocalizedString("VerticalPosLabel"), (int)imageElement.PosY, out IntegerUpDown posYUpDown);
+            //AddLabelAndIntegerUpDown(stackPanel, "Szerokość tła: ", (int)imageElement.Width, out IntegerUpDown widthUpDown);
+            //AddLabelAndIntegerUpDown(stackPanel, "Wysokość tła: ", (int)imageElement.Height, out IntegerUpDown heightUpDown);
+            //AddLabelAndColorPicker(stackPanel, "Kolor tła: ", imageElement.BackgroundColor.Color, out ColorPicker.StandardColorPicker backgroundColorPicker);
             AddBringToFrontButton(stackPanel, imageElement);
            
             
             AddChangeImageButton(stackPanel, imageElement);
             
-            AddConfirmImageButton(stackPanel, canvas, imageElement, posXUpDown, posYUpDown, widthUpDown, heightUpDown, backgroundColorPicker, imageScaleSlider);
+            AddConfirmImageButton(stackPanel, canvas, imageElement, posXUpDown, posYUpDown,/* widthUpDown, heightUpDown, backgroundColorPicker,*/ imageScaleSlider);
             AddCopyButton(stackPanel, canvas, imageElement);
             AddDeleteButton(stackPanel, canvas, imageElement);
 
@@ -165,8 +155,8 @@ namespace PlakietkUJ.PrintableElements
         {
             //ChangeImageSource
             Button changeImageButton = new Button();
-            changeImageButton.Content = "Zmień obraz";
-            changeImageButton.Margin = new Thickness(0, 0, 0, 10);
+            changeImageButton.Content = LocalizationHelper.GetLocalizedString("ChangeImageButton");
+            changeImageButton.Margin = new Thickness(0, 10, 0, 10);
 
             changeImageButton.Click += (sender, e) =>
             {
@@ -182,17 +172,17 @@ namespace PlakietkUJ.PrintableElements
             stackPanel.Children.Add(changeImageButton);
         }
 
-        private static void AddConfirmImageButton(StackPanel stackPanel, Canvas canvas, ImageElement imageElement, IntegerUpDown posXUpDown, IntegerUpDown posYUpDown, IntegerUpDown widthUpDown, IntegerUpDown heightUpDown, StandardColorPicker backgroundColorPicker, Slider imageScaleSlider)
+        private static void AddConfirmImageButton(StackPanel stackPanel, Canvas canvas, ImageElement imageElement, IntegerUpDown posXUpDown, IntegerUpDown posYUpDown, /*IntegerUpDown widthUpDown, IntegerUpDown heightUpDown, StandardColorPicker backgroundColorPicker,*/ Slider imageScaleSlider)
         {
             Button confirmButton = new Button();
-            confirmButton.Content = "Zatwierdź";
+            confirmButton.Content = LocalizationHelper.GetLocalizedString("ConfirmButton");
             confirmButton.Click += (sender, e) =>
             {
                 imageElement.PosX = double.Parse(posXUpDown.Text);
                 imageElement.PosY = double.Parse(posYUpDown.Text);
-                imageElement.Width = double.Parse(widthUpDown.Text);
-                imageElement.Height = double.Parse(heightUpDown.Text);
-                imageElement.BackgroundColor = new SolidColorBrush(backgroundColorPicker.SelectedColor);
+                //imageElement.Width = double.Parse(widthUpDown.Text);
+                //imageElement.Height = double.Parse(heightUpDown.Text);
+                //imageElement.BackgroundColor = new SolidColorBrush(backgroundColorPicker.SelectedColor);
                 imageElement.ImageScale = imageScaleSlider.Value;
 
                 //run property changed event
@@ -210,7 +200,7 @@ namespace PlakietkUJ.PrintableElements
         internal static UIElement AddBackgroundElementControlsToEditablePanel(BackgroundElement printableElement)
         {
             Expander expander = new Expander();
-            expander.Header = "Edytuj tło";
+            expander.Header = LocalizationHelper.GetLocalizedString("EditBackgroundLabel");
 
             StackPanel stackPanel = new StackPanel();
             stackPanel.Orientation = Orientation.Vertical;
@@ -218,9 +208,9 @@ namespace PlakietkUJ.PrintableElements
 
             int dpi = PageDpiHelper.GetDpiForA4((int)Math.Min(printableElement.Width, printableElement.Height));
 
-            AddLabelAndIntegerUpDown(stackPanel, "DPI dla kartki A4: ", dpi, out IntegerUpDown dpiUpDown);
-            AddLabelAndColorPicker(stackPanel, "Kolor tła: ", printableElement.BackgroundColor.Color, out ColorPicker.StandardColorPicker backgroundColorPicker);
-            AddLabelAndCheckBox(stackPanel, "Pionowo: ", printableElement.IsVertical, out CheckBox isVerticalCheckBox);
+            AddLabelAndIntegerUpDown(stackPanel, LocalizationHelper.GetLocalizedString("DPILabel"), dpi, out IntegerUpDown dpiUpDown);
+            AddLabelAndColorPicker(stackPanel, LocalizationHelper.GetLocalizedString("BackgroundColorLabel"), printableElement.BackgroundColor.Color, out ColorPicker.StandardColorPicker backgroundColorPicker);
+            AddLabelAndCheckBox(stackPanel, LocalizationHelper.GetLocalizedString("VerticalCheckBox"), printableElement.IsVertical, out CheckBox isVerticalCheckBox);
 
             AddConfirmBackGroundButton(stackPanel, printableElement, dpiUpDown, isVerticalCheckBox, backgroundColorPicker);
 
@@ -231,7 +221,7 @@ namespace PlakietkUJ.PrintableElements
         private static void AddConfirmBackGroundButton(StackPanel stackPanel, BackgroundElement printableElement, IntegerUpDown dpiUpDown, CheckBox isVerticalCheckBox, StandardColorPicker backgroundColorPicker)
         {
             Button confirmButton = new Button();
-            confirmButton.Content = "Zatwierdź";
+            confirmButton.Content = LocalizationHelper.GetLocalizedString("ConfirmButton");
             confirmButton.Click += (sender, e) =>
             {
                 printableElement.BackgroundColor = new SolidColorBrush(backgroundColorPicker.SelectedColor);
@@ -269,7 +259,7 @@ namespace PlakietkUJ.PrintableElements
         private static void AddDeleteButton(StackPanel stackPanel, Canvas canvas, PrintableElement element)
         {
             Button deleteButton = new Button();
-            deleteButton.Content = "Usuń";
+            deleteButton.Content = LocalizationHelper.GetLocalizedString("DeleteButton");
             deleteButton.Click += (sender, e) =>
             {
                 canvas.Children.Remove(canvas.Children[0]);
@@ -309,15 +299,31 @@ namespace PlakietkUJ.PrintableElements
 
         private static void AddLabelAndColorPicker(StackPanel parentPanel, string labelText, Color selectedColor, out ColorPicker.StandardColorPicker colorPicker)
         {
-            Label label = new Label();
-            label.Content = labelText;
+            Label label = new Label
+            {
+                Content = labelText
+            };
 
-            colorPicker = new ColorPicker.StandardColorPicker();
-            colorPicker.SelectedColor = selectedColor;
-            colorPicker.FontSize = 10;
+
+            colorPicker = new ColorPicker.StandardColorPicker
+            {
+                SelectedColor = selectedColor
+            };
+
+            ResourceDictionary colorPickerStyle = new ResourceDictionary();
+            colorPickerStyle.Source = new Uri("pack://application:,,,/ColorPicker;component/Styles/DefaultColorPickerStyle.xaml");
+            colorPicker.Style = colorPickerStyle["DefaultColorPickerStyle"] as Style;
+
+            colorPickerStyle = new ResourceDictionary();
+            colorPickerStyle.Source = new Uri("pack://application:,,,/PlakietkUJ;component/Theme/ColorPickerStyle.xaml");
+            colorPicker.Style = colorPickerStyle["MyLightColorPickerStyle"] as Style;
+
 
             parentPanel.Children.Add(label);
             parentPanel.Children.Add(colorPicker);
+                
+            
+
         }
 
 
@@ -349,7 +355,7 @@ namespace PlakietkUJ.PrintableElements
         {
             Button copyButton = new Button();
             copyButton.Margin = new Thickness(0, 10, 0, 0);
-            copyButton.Content = "Kopiuj";
+            copyButton.Content = LocalizationHelper.GetLocalizedString("CopyButton");
             copyButton.Click += (sender, e) =>
             {
                 element.OnCopy();
@@ -367,6 +373,19 @@ namespace PlakietkUJ.PrintableElements
             positionAndSizeStackPanel.Orientation = Orientation.Vertical;
             positionAndSizeExpander.Content = positionAndSizeStackPanel;
             mainStackPanel.Children.Add(positionAndSizeExpander);
+        }
+
+        private static void AddBringToFrontButton(StackPanel positionAndSizeStackPanel, PrintableElement printableElement)
+        {
+            Button bringToFrontButton = new Button();
+            bringToFrontButton.Margin = new Thickness(0, 10, 0, 0);
+            bringToFrontButton.Content = LocalizationHelper.GetLocalizedString("BringToFrontButton");
+            bringToFrontButton.Click += (sender, e) =>
+            {
+                printableElement.OnBringToFront();
+            };
+
+            positionAndSizeStackPanel.Children.Add(bringToFrontButton);
         }
 
         #endregion

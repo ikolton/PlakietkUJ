@@ -6,6 +6,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:PlakietkUJ"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:helperClass="clr-namespace:PlakietkUJ.HelperClass"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.FontWeight="Medium"
@@ -15,11 +16,13 @@
         Title="PlakietkUJ" Height="500" Width="800" WindowState="Maximized">
     <Window.Resources>
         <ResourceDictionary>
-            <!-- Material Design Theme -->
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary
+                    Source="pack://application:,,,/ColorPicker;component/Styles/DefaultColorPickerStyle.xaml" />
                 <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="DeepPurple" SecondaryColor="Lime" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
 
         </ResourceDictionary>
     </Window.Resources>
@@ -42,8 +45,8 @@
                 <ScrollViewer Width="300" >
                 <StackPanel Background="{DynamicResource MaterialDesignLightSeparatorBackground}">
                     <StackPanel>
-                        <Button Content="Dodaj Pole Tekstowe" Click="AddTextField_Click" Margin="10"/>
-                        <Button Content="Dodaj Obrazek" Click="AddImageElement_Click" Margin="10"/>
+                        <Button Content="{Binding AddTextFieldButtonText}" Click="AddTextField_Click" Margin="10"/>
+                        <Button Content="{Binding AddImageElementButtonText}" Click="AddImageElement_Click" Margin="10"/>
                     </StackPanel>
                     <StackPanel x:Name="EditableObjectsPanel">
                         
@@ -52,9 +55,16 @@
             </ScrollViewer>
 
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" >
-                <Button Content="Zapisz" Click="SaveButton_Click"  HorizontalAlignment="Center" Margin="5"/>
-                <Button Content="Drukuj" Click="PrintButton_Click"  HorizontalAlignment="Center" Margin="5"/>
-                <Button Content="Wczytaj" Click="LoadButton_Click"  Margin="5"></Button>
+                <Button Content="{Binding SaveButtonText}" Click="SaveButton_Click" HorizontalAlignment="Center" Margin="5"/>
+                <Button Content="{Binding PrintButtonText}" Click="PrintButton_Click"  HorizontalAlignment="Center" Margin="5"/>
+                <Button Content="{Binding LoadButtonText}" Click="LoadButton_Click"  Margin="5"></Button>
+
+                <ComboBox Name="LanguageComboBox" Text="{Binding ChangeLanguageComboBoxText }" IsEditable="True" 
+                    SelectionChanged="Language_SelectionChanged">
+                    <ComboBoxItem Name="PolishButton" Content="{Binding PolishLanguageText}" Tag="pl-PL"/>
+                    <ComboBoxItem Name="EnglishButton" Content="{Binding EnglishLanguageText}" Tag="en-US"/>
+                </ComboBox>
+                
             </StackPanel>
         </Grid>
     </Grid>

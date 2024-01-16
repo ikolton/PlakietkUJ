@@ -1,24 +1,15 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using PlakietkUJ.PrintableElements;
-using ColorPicker;
 using Microsoft.Win32;
 using Newtonsoft.Json;
-using System.Printing;
 using PlakietkUJ.HelperClass;
+using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace PlakietkUJ
 {
@@ -26,11 +17,55 @@ namespace PlakietkUJ
     {
         List<PrintableElement> printableElements = new List<PrintableElement>();
 
+        #region Localization
+        public string SaveButtonText { get; set; } = LocalizationHelper.GetLocalizedString("SaveButton");
+        public string LoadButtonText { get; set; } = LocalizationHelper.GetLocalizedString("LoadButton");
+        public string PrintButtonText { get; set; } = LocalizationHelper.GetLocalizedString("PrintButton");
+        public string AddTextFieldButtonText { get; set; } = LocalizationHelper.GetLocalizedString("AddTextFieldButton");
+        public string AddImageElementButtonText { get; set; } = LocalizationHelper.GetLocalizedString("AddImageButton");
+        public string ChangeLanguageComboBoxText { get; set; } = LocalizationHelper.GetLocalizedString("Language");
+        public string EnglishLanguageText { get; set; } = LocalizationHelper.GetLocalizedString("English");
+        public string PolishLanguageText { get; set; } = LocalizationHelper.GetLocalizedString("Polish");
+
+        public void Language_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (LanguageComboBox.SelectedIndex == 0)
+            {
+                LocalizationHelper.ChangeCulture("pl-PL");
+            }
+            else if (LanguageComboBox.SelectedIndex == 1)
+            {
+                LocalizationHelper.ChangeCulture("en-US");
+            }   
+            
+        }
+
+        public void SetComboBoxCurrentLanguage()
+        {
+            var currLang = Properties.Settings.Default.LanguageCode.ToString();
+            if (currLang == "pl-PL")
+            {
+
+                ChangeLanguageComboBoxText = PolishLanguageText;
+            }
+            else
+            {
+                ChangeLanguageComboBoxText = EnglishLanguageText;
+            }
+            
+        }
+
+        #endregion
+
 
         public PlateEditorWindow()
         {
+            
+
             InitializeComponent();
             AddBackgroundElement(CreateBasicBackgroundPrintableElement(100));
+            SetComboBoxCurrentLanguage();
+            DataContext = this;
         }
 
         #region BackgroundElement
@@ -76,7 +111,7 @@ namespace PlakietkUJ
 
         private void AddTextField_Click(object sender, RoutedEventArgs e)
         {
-            TextField textField = new TextField(0, 0, 10, 10, "Ustaw tekst", Brushes.Black, 14, new FontFamily("Arial"), Brushes.Transparent);
+            TextField textField = new TextField(0, 0, 200, 10, LocalizationHelper.GetLocalizedString("DefaultSetText"), Brushes.Black, 14, new FontFamily("Arial"), Brushes.Transparent);
             AddTextField(textField);
         }
 
@@ -92,7 +127,7 @@ namespace PlakietkUJ
             textField.PropertyChanged += () =>
             {
                 EditTextFieldUiElement(canvas, textField);
-                controls.Header = "Edytuj tekst: " + textField.Text;
+                controls.Header = LocalizationHelper.GetLocalizedString("EditText") + textField.Text;
             };
 
             textField.Deleted += () =>
@@ -123,10 +158,12 @@ namespace PlakietkUJ
             textBlock.FontFamily = textField.Font;
             textBlock.FontStyle = textField.FontStyle;
             textBlock.FontWeight = textField.FontWeight;
+            textBlock.HorizontalAlignment = HorizontalAlignment.Center;
+            textBlock.VerticalAlignment = VerticalAlignment.Center;
+            textBlock.TextAlignment = TextAlignment.Center;
+            textBlock.Background = textField.BackgroundColor;
 
-            canvas.Width = textField.Width;
-            canvas.Height = textField.Height;
-            canvas.Background = textField.BackgroundColor;
+           
 
             Canvas.SetLeft(canvas, textField.PosX);
             Canvas.SetTop(canvas, textField.PosY);
@@ -141,18 +178,19 @@ namespace PlakietkUJ
                 FontSize = textField.FontSize,
                 FontFamily = textField.Font,
                 FontStyle = textField.FontStyle,
-                FontWeight = textField.FontWeight
-            };
-
-            Canvas canvas = new Canvas
-            {
-                Width = textField.Width,
-                Height = textField.Height,
+                FontWeight = textField.FontWeight,
+                TextAlignment = TextAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
                 Background = textField.BackgroundColor
             };
+
+            Canvas canvas = new Canvas();
            
 
             canvas.Children.Add(textBlock);
+
+           
 
 
             Canvas.SetLeft(canvas, textField.PosX);
@@ -229,9 +267,7 @@ namespace PlakietkUJ
             image.Width = imageElement.ImageSource.Width * imageElement.ImageScale;
            
 
-            canvas.Width = imageElement.Width;
-            canvas.Height = imageElement.Height;
-            canvas.Background = imageElement.BackgroundColor;
+            
 
             Canvas.SetLeft(canvas, imageElement.PosX);
             Canvas.SetTop(canvas, imageElement.PosY);
@@ -252,14 +288,12 @@ namespace PlakietkUJ
                 Source = imageElement.ImageSource,
                 Height = imageElement.ImageSource.Height * imageElement.ImageScale,
                 Width = imageElement.ImageSource.Width * imageElement.ImageScale
-        };
+            };
 
 
             Canvas canvas = new Canvas
             {
-                Width = imageElement.Width,
-                Height = imageElement.Height,
-                Background = imageElement.BackgroundColor
+                
             };
 
             Canvas.SetLeft(canvas, imageElement.PosX);
