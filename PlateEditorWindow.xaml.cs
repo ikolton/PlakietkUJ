@@ -354,9 +354,7 @@ namespace PlakietkUJ
         
         private void LoadButton_Click(object sender, RoutedEventArgs e)
         {
-            BackgroundBox.Children.Clear();
-            EditableObjectsPanel.Children.Clear();
-            printableElements.Clear();
+            
 
             
 
@@ -364,6 +362,10 @@ namespace PlakietkUJ
             openFileDialog.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
             {
+                BackgroundBox.Children.Clear();
+                EditableObjectsPanel.Children.Clear();
+                printableElements.Clear();
+
                 string json = System.IO.File.ReadAllText(openFileDialog.FileName);
                 List<PrintableElement> loadedPrintableElements = JsonConvert.DeserializeObject<List<PrintableElement>>(json);
                 
