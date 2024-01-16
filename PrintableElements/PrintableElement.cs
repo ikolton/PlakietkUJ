@@ -1,7 +1,5 @@
 ﻿using JsonSubTypes;
 using Newtonsoft.Json;
-using System.ComponentModel;
-using System.Windows;
 using System.Windows.Media;
 
 namespace PlakietkUJ.PrintableElements

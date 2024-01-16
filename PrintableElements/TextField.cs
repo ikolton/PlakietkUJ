@@ -1,8 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Media;
-using System.ComponentModel;
-using Newtonsoft.Json;
-using JsonSubTypes;
+
 
 namespace PlakietkUJ.PrintableElements
 {

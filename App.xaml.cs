@@ -1,6 +1,4 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows;
 
 namespace PlakietkUJ
@@ -14,7 +12,7 @@ namespace PlakietkUJ
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-
+            //Language Setup
             var langCode = PlakietkUJ.Properties.Settings.Default.LanguageCode;
             Thread.CurrentThread.CurrentCulture = new CultureInfo(langCode);
             Thread.CurrentThread.CurrentUICulture = new CultureInfo(langCode);

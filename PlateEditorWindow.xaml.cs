@@ -1,6 +1,4 @@
-﻿using System;
-using System.Globalization;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -8,8 +6,7 @@ using PlakietkUJ.PrintableElements;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using PlakietkUJ.HelperClass;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
+
 
 namespace PlakietkUJ
 {
