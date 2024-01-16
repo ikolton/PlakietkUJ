@@ -21,7 +21,7 @@ PlakietkUJ supports both Polish and English languages. To switch between languag
 ## Usage
 
 1. Download the latest release from the [Releases](https://github.com/ikolton/PlakietkUJ/releases) section.
-2. Extract the contents and run the executable.
+2. Extract the contents and run the executable (with pink icon).
 3. Design your templates using the user interface.
 4. Save and load templates as needed.
 5. Print your designs for actual use.
