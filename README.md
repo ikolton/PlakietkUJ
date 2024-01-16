@@ -1,5 +1,10 @@
 # PlakietkUJ
 
+### Note from author
+*This project marks my initial venture into WPF development, and while I acknowledge that certain aspects could be refined for enhanced efficiency and elegance, I view this as a stepping stone towards honing my skills. I'm optimistic about implementing improvements and applying newfound insights in my upcoming projects.*
+
+
+## Description
 PlakietkUJ is an application for creating print templates. The main goal was to develop a tool for designing templates for room signage. The features include background editing, adding and editing images and text. Created templates can be saved in JSON format and later loaded for editing. The application supports printing of the designed templates. It comes with built-in support for both Polish and English languages. Note that you need to restart the application after changing the language settings.
 
 ## Features
