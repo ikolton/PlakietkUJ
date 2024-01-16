@@ -36,5 +36,4 @@ This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-Feel free to contribute or report issues!
-# PlakietkUJ
+Feel free to report issues!
