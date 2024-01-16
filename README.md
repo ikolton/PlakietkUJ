@@ -32,7 +32,8 @@ PlakietkUJ supports both Polish and English languages. To switch between languag
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the MIT License
+
 
 ---
 
