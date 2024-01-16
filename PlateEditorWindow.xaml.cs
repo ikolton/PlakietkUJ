@@ -356,8 +356,6 @@ namespace PlakietkUJ
         {
             
 
-            
-
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Json Files (*.json)|*.json|All Files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)

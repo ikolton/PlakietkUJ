@@ -78,6 +78,7 @@ namespace PlakietkUJ.PrintableElements
         {
             Button confirmButton = new Button();
             confirmButton.Content = LocalizationHelper.GetLocalizedString("ConfirmButton");
+            confirmButton.Margin = new Thickness(10);
             confirmButton.Click += (sender, e) =>
             {
                 textField.PosX = posXUpDown.Value.Value;
@@ -96,8 +97,9 @@ namespace PlakietkUJ.PrintableElements
                 textField.OnPropertyChanged();
 
             };
-
-            stackPanel.Children.Add(confirmButton);
+            //add button at firstplace
+            stackPanel.Children.Insert(0, confirmButton);
+            
         }
 
 
@@ -176,6 +178,7 @@ namespace PlakietkUJ.PrintableElements
         {
             Button confirmButton = new Button();
             confirmButton.Content = LocalizationHelper.GetLocalizedString("ConfirmButton");
+            confirmButton.Margin = new Thickness(10);
             confirmButton.Click += (sender, e) =>
             {
                 imageElement.PosX = double.Parse(posXUpDown.Text);
@@ -189,7 +192,7 @@ namespace PlakietkUJ.PrintableElements
                 imageElement.OnPropertyChanged();
             };
 
-            stackPanel.Children.Add(confirmButton);
+            stackPanel.Children.Insert(0, confirmButton);
         }
 
         #endregion
@@ -222,6 +225,7 @@ namespace PlakietkUJ.PrintableElements
         {
             Button confirmButton = new Button();
             confirmButton.Content = LocalizationHelper.GetLocalizedString("ConfirmButton");
+            confirmButton.Margin = new Thickness(10);
             confirmButton.Click += (sender, e) =>
             {
                 printableElement.BackgroundColor = new SolidColorBrush(backgroundColorPicker.SelectedColor);
@@ -247,7 +251,7 @@ namespace PlakietkUJ.PrintableElements
                 printableElement.OnPropertyChanged();
             };
 
-            stackPanel.Children.Add(confirmButton);
+            stackPanel.Children.Insert(0, confirmButton);
         }
 
         #endregion
