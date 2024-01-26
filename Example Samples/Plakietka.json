@@ -1,0 +1,68 @@
+[
+  {
+    "$type": "PlakietkUJ.PrintableElements.BackgroundElement, PlakietkUJ",
+    "IsVertical": false,
+    "Type": "BackgroundElement",
+    "PosX": 0.0,
+    "PosY": 0.0,
+    "Width": 1653.0,
+    "Height": 1169.0,
+    "BackgroundColor": "#FFFFFFFF"
+  },
+  {
+    "$type": "PlakietkUJ.PrintableElements.TextField, PlakietkUJ",
+    "Text": "Sala nr. 0012",
+    "FontColor": "#FF000000",
+    "FontSize": 100.0,
+    "Font": "Arial",
+    "FontStyle": "Normal",
+    "FontWeight": "Bold",
+    "Type": "TextField",
+    "PosX": 750.0,
+    "PosY": 200.0,
+    "Width": 10.0,
+    "Height": 10.0,
+    "BackgroundColor": "#00FCFCFC"
+  },
+  {
+    "$type": "PlakietkUJ.PrintableElements.ImageElement, PlakietkUJ",
+    "ImageSource": "file:///D:/Programowanie/UJ/Lab_C%23/PlakietkUJ Pliki/UJ.jpg",
+    "ImageScale": 1.0,
+    "Type": "ImageElement",
+    "PosX": 50.0,
+    "PosY": 50.0,
+    "Width": 200.0,
+    "Height": 200.0,
+    "BackgroundColor": "#00FFFFFF"
+  },
+  {
+    "$type": "PlakietkUJ.PrintableElements.TextField, PlakietkUJ",
+    "Text": "prof. dr. Jerzy Różowy",
+    "FontColor": "#FF0A0A0A",
+    "FontSize": 90.0,
+    "Font": "Arial",
+    "FontStyle": "Normal",
+    "FontWeight": "Normal",
+    "Type": "TextField",
+    "PosX": 400.0,
+    "PosY": 700.0,
+    "Width": 10.0,
+    "Height": 10.0,
+    "BackgroundColor": "#00FCFCFC"
+  },
+  {
+    "$type": "PlakietkUJ.PrintableElements.TextField, PlakietkUJ",
+    "Text": "dr. Włodzimierz Biały",
+    "FontColor": "#FF000000",
+    "FontSize": 90.0,
+    "Font": "Arial",
+    "FontStyle": "Normal",
+    "FontWeight": "Normal",
+    "Type": "TextField",
+    "PosX": 400.0,
+    "PosY": 850.0,
+    "Width": 10.0,
+    "Height": 10.0,
+    "BackgroundColor": "#00FFFFFF"
+  }
+]
